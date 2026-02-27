@@ -19,7 +19,14 @@ return {
   },
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
-    "stevearc/dressing.nvim",
+    {
+      "stevearc/dressing.nvim",
+      opts = {
+        select = {
+          enabled = false,
+        },
+      },
+    },
     "nvim-lua/plenary.nvim",
     "MunifTanjim/nui.nvim",
     "nvim-tree/nvim-web-devicons",
