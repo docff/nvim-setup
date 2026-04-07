@@ -1,10 +1,11 @@
--- LSP
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References" })
-vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Implementation" })
-vim.keymap.set("n", "K",  vim.lsp.buf.hover, { desc = "Hover docs" })
-vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
-vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
+-- LSP (via Lspsaga)
+vim.keymap.set("n", "gd", "<cmd>Lspsaga goto_definition<CR>", { desc = "Go to definition" })
+vim.keymap.set("n", "gD", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek definition" })
+vim.keymap.set("n", "gr", "<cmd>Lspsaga finder ref<CR>", { desc = "References" })
+vim.keymap.set("n", "gi", "<cmd>Lspsaga finder imp<CR>", { desc = "Implementation" })
+vim.keymap.set("n", "K",  "<cmd>Lspsaga hover_doc<CR>", { desc = "Hover docs" })
+vim.keymap.set("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", { desc = "Rename symbol" })
+vim.keymap.set("n", "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "Code action" })
 
 -- Telescope
 local builtin = require("telescope.builtin")
@@ -23,6 +24,7 @@ end, { desc = "Find media in current directory", })
 vim.keymap.set("n", "<leader>gf", builtin.git_files, { desc = "Git files" })
 vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Git status" })
 vim.keymap.set("n", "<leader>gb", builtin.git_branches, { desc = "Git branches" })
+vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "Git diff view" })
 
 vim.keymap.set("n", "<leader>fp", function()
   builtin.find_files({ cwd = vim.fn.getcwd() })
@@ -84,14 +86,10 @@ vim.keymap.set("n", "<leader>e", function()
   api.tree.focus()
 end, { desc = "Smart focus toggle: nvim-tree ↔ last editor" })
 
--- Diagnostics
-vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Line diagnostics" })
--- vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
--- vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-
-vim.diagnostic.config({
-  float = { border = "rounded" },
-})
+-- Diagnostics (via Lspsaga)
+vim.keymap.set("n", "<leader>d", "<cmd>Lspsaga show_line_diagnostics<CR>", { desc = "Line diagnostics" })
+vim.keymap.set("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", { desc = "Prev diagnostic" })
+vim.keymap.set("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", { desc = "Next diagnostic" })
 
 -- Lines
 vim.keymap.set("n", "<leader>ln", function()

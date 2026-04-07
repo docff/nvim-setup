@@ -1,3 +1,9 @@
+vim.filetype.add({
+  extension = {
+    sage = "python",
+  },
+})
+
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     -- open NvimTree only if Neovim was started without arguments

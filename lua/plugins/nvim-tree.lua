@@ -18,6 +18,18 @@ return {
         custom = {},
         exclude = {},
       },
+      git = {
+        enable = true,
+        ignore = false,
+      },
+      renderer = {
+        highlight_git = "name",
+        icons = {
+          show = {
+            git = true,
+          },
+        },
+      },
       view = {
         adaptive_size = true,
       },
@@ -27,6 +39,9 @@ return {
       on_attach = function (bufnr)
         local api = require("nvim-tree.api")
         local preview = require("utils.media_preview")
+
+        api.map.on_attach.default(bufnr)
+
         local function opts(desc)
           return {
             desc = "nvim-tree: " .. desc,
@@ -35,6 +50,7 @@ return {
             silent = true,
           }
         end
+
         vim.keymap.set("n", "<C-p>", function()
           local node = api.tree.get_node_under_cursor()
           if node and node.absolute_path then
@@ -51,13 +67,7 @@ return {
           end
         end, opts("Open directory / file (vertical split)"))
 
-        -- vim.keymap.set("n", "o", api.fs.create, opts("Create"))
-        -- vim.keymap.set("n", "ce", api.fs.rename, opts("Rename"))
-        -- vim.keymap.set("n", "x", api.fs.cut, opts("Cut"))
-        -- vim.keymap.set("n", "v", api.fs.paste, opts("Paste"))
-        -- vim.keymap.set("n", "d", api.fs.trash, opts("Trash"))
-        -- vim.keymap.set("n", "D", api.fs.remove, opts("Delete"))
-        -- vim.keymap.set("n", "g.", api.tree.toggle_hidden_filter, opts("Dotfiles"))
+        vim.keymap.set("n", "o", api.fs.create, opts("Create file/directory"))
       end,
     })
   end
