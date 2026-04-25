@@ -20,6 +20,13 @@ Install these tools before first launch.
 - `cmake` (required by `telescope-fzf-native.nvim`)
 - C/C++ compiler toolchain (`clang` on macOS via Xcode Command Line Tools)
 
+### Nerd Font (required for icons)
+
+`nvim-web-devicons` (used by oil.nvim, nvim-tree, lualine, etc.) requires a Nerd Font set in
+your terminal emulator. Without it, file/folder icons will appear as boxes or question marks.
+
+Recommended: **JetBrainsMono Nerd Font**
+
 ### Useful Telescope dependencies
 
 - `ripgrep` (`rg`) for fast grep/search
@@ -39,13 +46,19 @@ brew install neovim git curl unzip ripgrep fd cmake tree-sitter-cli
 xcode-select --install
 ```
 
+Install a Nerd Font and set it in your terminal (iTerm2 / Terminal.app preferences):
+
+```bash
+brew install --cask font-jetbrains-mono-nerd-font
+```
+
 ## Linux Install
 
 ### Debian/Ubuntu
 
 ```bash
 sudo apt update
-sudo apt install -y neovim git curl unzip ripgrep fd-find cmake build-essential tree-sitter-cli python3 cargo
+sudo apt install -y neovim git curl unzip ripgrep fd-find cmake build-essential python3 python3-venv nodejs npm
 ```
 
 If `fd` is not found after install, create an alias/symlink (`fdfind` is the binary name on some distros):
@@ -53,6 +66,53 @@ If `fd` is not found after install, create an alias/symlink (`fdfind` is the bin
 ```bash
 command -v fd || sudo ln -s "$(command -v fdfind)" /usr/local/bin/fd
 ```
+
+**Ubuntu-specific: Nerd Font**
+
+Install JetBrainsMono Nerd Font (for icons in oil.nvim, nvim-tree, lualine, etc.):
+
+```bash
+mkdir -p ~/.local/share/fonts
+curl -fLo /tmp/JetBrainsMono.zip \
+  "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip"
+unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/JetBrainsMonoNF/ '*.ttf'
+fc-cache -fv ~/.local/share/fonts/
+```
+
+Then set **JetBrainsMono Nerd Font** as the font in your terminal emulator (Konsole: Settings →
+Edit Current Profile → Appearance → Font).
+
+**Ubuntu-specific: `tree-sitter-cli`**
+
+The `tree-sitter-cli` package in apt is too old (v0.20.x). `nvim-treesitter` requires v0.26.1+.
+Install the pre-built binary instead:
+
+```bash
+curl -L https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.4/tree-sitter-linux-x64.gz \
+  -o /tmp/tree-sitter.gz \
+  && gunzip /tmp/tree-sitter.gz \
+  && chmod +x /tmp/tree-sitter \
+  && mkdir -p ~/.local/bin \
+  && mv /tmp/tree-sitter ~/.local/bin/tree-sitter
+```
+
+Verify `~/.local/bin` is in your `PATH` (it typically is on Ubuntu), then confirm:
+
+```bash
+tree-sitter --version   # should print 0.26.x
+```
+
+**Ubuntu-specific: `telescope-fzf-native.nvim`**
+
+The cmake build step for `telescope-fzf-native.nvim` may not run automatically on first install.
+If you see `libfzf.so: No such file or directory`, build it manually:
+
+```bash
+cd ~/.local/share/nvim/lazy/telescope-fzf-native.nvim
+cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release --target install
+```
+
+Or from inside Neovim: `:Lazy build telescope-fzf-native.nvim`
 
 ### Arch Linux
 
@@ -122,7 +182,10 @@ command -v fd
 
 ## Troubleshooting
 
-- `ENOENT ... 'tree-sitter'` during `:TSUpdate`: `tree-sitter` CLI is missing from `PATH`. Install `tree-sitter-cli` and restart Neovim.
-- `nvim-treesitter/install/...` build failures: ensure `cmake` and command line build tools are installed.
+- `ENOENT ... 'tree-sitter'` during `:TSUpdate`: `tree-sitter` CLI is missing from `PATH`. On Ubuntu, install the binary manually (see Ubuntu-specific section above) — the apt package is too old.
+- `tree-sitter build` subcommand not recognized: apt version is too old (v0.20.x). Install v0.26.1+ binary from GitHub releases (see Ubuntu-specific section above).
+- `libfzf.so: No such file or directory` for telescope-fzf-native: run the cmake build manually (see Ubuntu-specific section above).
+- Mason fails to install `basedpyright`: install `python3-venv` (`sudo apt install python3-venv`) — Mason creates a venv to isolate the LSP and fails silently without it.
+- `nvim-treesitter/install/...` build failures: ensure `cmake` and `build-essential` are installed.
 - `fd` not found on Debian/Ubuntu: install `fd-find` and map `fdfind` to `fd`.
 
