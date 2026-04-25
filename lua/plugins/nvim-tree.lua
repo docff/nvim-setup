@@ -31,7 +31,9 @@ return {
         },
       },
       view = {
-        adaptive_size = true,
+        adaptive_size = false,
+        width = 30,
+        preserve_window_proportions = true,
       },
       live_filter = {
         always_show_folders = false,

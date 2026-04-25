@@ -25,6 +25,7 @@ vim.opt.relativenumber = true
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+vim.opt.equalalways = false
 
 vim.opt.termguicolors = true
 vim.opt.modifiable = true
