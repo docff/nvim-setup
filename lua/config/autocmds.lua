@@ -16,8 +16,15 @@ vim.api.nvim_create_autocmd("VimEnter", {
 vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
   callback = function()
     local ft = vim.bo.filetype
+    local buftype = vim.bo.buftype
     vim.schedule(function()
-      if ft == "NvimTree" then
+      if not vim.api.nvim_win_is_valid(vim.api.nvim_get_current_win()) then
+        return
+      end
+      if vim.api.nvim_win_get_config(0).relative ~= "" then
+        return
+      end
+      if ft == "NvimTree" or ft == "TelescopePrompt" or ft == "TelescopeResults" or ft == "TelescopePreview" or buftype == "prompt" or buftype == "nofile" then
         return
       elseif ft == "oil" then
         local bufname = vim.api.nvim_buf_get_name(0)
