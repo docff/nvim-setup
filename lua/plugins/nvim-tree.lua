@@ -70,6 +70,8 @@ return {
         end, opts("Open directory / file (vertical split)"))
 
         vim.keymap.set("n", "o", api.fs.create, opts("Create file/directory"))
+
+        vim.keymap.set("n", "`", api.tree.change_root_to_node, opts("CD into node"))
       end,
     })
   end
