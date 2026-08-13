@@ -2,7 +2,7 @@ return {
   "f-person/git-blame.nvim",
   event = "VeryLazy",
   opts = {
-    enabled = false, -- toggle on demand with <leader>gB
+    enabled = true, -- toggle off on demand with <leader>gB
     message_template = "  <author> • <date> • <summary>",
     date_format = "%r",
     virtual_text_column = 1,
